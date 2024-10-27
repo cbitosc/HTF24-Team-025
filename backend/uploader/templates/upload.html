@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Based Video Summary Generator</title>
+    <style>
+        :root[data-theme="light"] {
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #34495e;
+            --accent-primary: #3498db;
+            --accent-secondary: #2980b9;
+            --input-bg: #ffffff;
+            --input-border: #e0e0e0;
+            --summary-bg: #f8f9fa;
+            --header-gradient: linear-gradient(135deg, #2c3e50, #3498db);
+            --toggle-bg: #e0e0e0;
+            --toggle-button: #ffffff;
+        }
+
+        :root[data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #e0e0e0;
+            --accent-primary: #3498db;
+            --accent-secondary: #2980b9;
+            --input-bg: #333333;
+            --input-border: #404040;
+            --summary-bg: #333333;
+            --header-gradient: linear-gradient(135deg, #1a1a1a, #2c3e50);
+            --toggle-bg: #404040;
+            --toggle-button: #2d2d2d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: var(--header-gradient);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .head {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--accent-primary);
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: white;
+            color: var(--text-primary);
+        }
+
+        main {
+            padding: 3rem 0;
+        }
+
+        section {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Toggle Switch Styles */
+        .toggle-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+
+        .toggle-label {
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 200px;
+            height: 40px;
+            background: var(--toggle-bg);
+            border-radius: 20px;
+            padding: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-button {
+            position: absolute;
+            width: 96px;
+            height: 32px;
+            background: var(--accent-primary);
+            border-radius: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-options {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            z-index: 1;
+        }
+
+        .toggle-option {
+            flex: 1;
+            text-align: center;
+            color: var(--text-primary);
+            padding: 8px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .toggle-option.active {
+            color: white;
+        }
+
+        /* Input Styles */
+        .input-content {
+            display: none;
+            margin-top: 2rem;
+            padding: 2rem;
+            border: 2px dashed var(--input-border);
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .input-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .input-content:hover {
+            border-color: var(--accent-primary);
+        }
+
+        input[type="file"],
+        input[type="url"] {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--input-border);
+            border-radius: 5px;
+            font-size: 1rem;
+            background: var(--input-bg);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        input[type="url"]:focus {
+            border-color: var(--accent-primary);
+            outline: none;
+        }
+
+        .input-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent-primary);
+        }
+
+        button {
+            background: var(--accent-primary);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+            margin: 40px;
+        }
+
+        button:hover {
+            background: var(--accent-secondary);
+        }
+
+        .summary-output {
+            background: var(--summary-bg);
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            min-height: 150px;
+            color: var(--text-secondary);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem 0;
+            background: var(--header-gradient);
+            color: white;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            header .container {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+                justify-content: center;
+            }
+
+            .toggle-switch {
+                width: 160px;
+            }
+
+            .toggle-button {
+                width: 76px;
+            }
+
+            main {
+                padding-bottom: 6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="head">Briefly.ai</h1>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About</a></li>
+                </ul>
+                <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="home">
+            <h2>Choose Your Video Input Method</h2>
+            <div class="toggle-container">
+                <div class="toggle-switch" onclick="toggleInput()">
+                    <div class="toggle-button"></div>
+                    <div class="toggle-options">
+                        <span class="toggle-option active">Upload File</span>
+                        <span class="toggle-option">Enter URL</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-content active" id="file-input">
+                <div class="input-icon">📁</div>
+                <h3>Upload Video File</h3>
+                <p>Drag and drop or select a video file from your device</p>
+                <input type="file" id="video-file" accept="video/*">
+            </div>
+
+            <div class="input-content" id="url-input">
+                <div class="input-icon">🔗</div>
+                <h3>Enter Video URL</h3>
+                <p>Paste a link to your video from any supported platform</p>
+                <input type="url" id="video-url" placeholder="https://example.com/video.mp4">
+            </div>
+
+            <button type="submit" onclick="generateSummary()">Generate Summary</button>
+        </section>
+
+        <section id="results">
+            <h2>Summary Results</h2>
+            <div class="summary-output">
+                <p>Your summary will appear here after processing the video.</p>
+            </div>
+            <button type="button" onclick="downloadSummary()">Download Summary PDF</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Briefly.ai. All rights reserved.</p>
+        <ul>&copy; Email : briefly@gmail.com             Ph no : +91 99999 99999. </ul>
+    </footer>
+    
+
+    <script>
+        let isFileInput = true;
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            
+            const button = document.querySelector('.theme-toggle');
+            button.innerHTML = isDark ? '🌙 Dark Mode' : '☀️ Light Mode';
+        }
+
+        function toggleInput() {
+            isFileInput = !isFileInput;
+            const toggleButton = document.querySelector('.toggle-button');
+            const options = document.querySelectorAll('.toggle-option');
+            const fileInput = document.getElementById('file-input');
+            const urlInput = document.getElementById('url-input');
+            
+            if (isFileInput) {
+                toggleButton.style.transform = 'translateX(0)';
+                options[0].classList.add('active');
+                options[1].classList.remove('active');
+                fileInput.classList.add('active');
+                urlInput.classList.remove('active');
+            } else {
+                toggleButton.style.transform = 'translateX(100px)';
+                options[0].classList.remove('active');
+                options[1].classList.add('active');
+                fileInput.classList.remove('active');
+                urlInput.classList.add('active');
+            }
+        }
+
+        let isFileUploaded = false;
+
+        function generateSummary() {
+            const fileInput = document.getElementById('video-file');
+            const urlInput = document.getElementById('video-url');
+            const summaryOutput = document.querySelector('.summary-output');
+            
+            
+            if ((isFileInput && fileInput.files.length > 0) || (!isFileInput && urlInput.value)) {
+                summaryOutput.innerHTML = '<p>Processing your video... Please wait.</p>';
+                
+                const formData = new FormData();
+                if (fileInput.files.length > 0) {
+                    formData.append('video_file', fileInput.files[0]);
+                }
+                // If you have a URL input, you can add it to the formData too
+                if (urlInput.value) {
+                    formData.append('video_url', urlInput.value);
+                }
+
+                // Make the AJAX request to upload the video
+                fetch('', {  // Assuming the form action is the same page
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'  // Include CSRF token
+                    }
+                })
+                .then(response => response.text())
+                .then(data => {
+                    isFileUploaded = true;
+                    summaryOutput.innerHTML = data;  // Display the response from the server
+                })
+                .catch(error => {
+                    summaryOutput.innerHTML = '<p>Error uploading video. Please try again.</p>';
+                    console.error('Error:', error);
+                });
+
+
+            } else {
+                summaryOutput.innerHTML = '<p>Please ' + (isFileInput ? 'select a video file' : 'enter a valid URL') + ' first.</p>';
+            }
+        }
+
+        function downloadSummary() {
+            if (isFileUploaded) {  // Check if a file was uploaded
+                window.location.href = '/download';  // Redirect to the download URL
+            } else {
+                alert('No summary available for download. Please upload a file first.');
+            }
+        }
+
+    </script>
+</body>
+</html>

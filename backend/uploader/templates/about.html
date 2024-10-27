@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Briefly.ai</title>
+    <style>
+        /* Keep your existing root styles */
+        :root[data-theme="light"] {
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #34495e;
+            --accent-primary: #3498db;
+            --accent-secondary: #2980b9;
+            --input-bg: #ffffff;
+            --input-border: #e0e0e0;
+            --summary-bg: #f8f9fa;
+            --header-gradient: linear-gradient(135deg, #2c3e50, #3498db);
+            --toggle-bg: #e0e0e0;
+            --toggle-button: #ffffff;
+        }
+
+        :root[data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #e0e0e0;
+            --accent-primary: #3498db;
+            --accent-secondary: #2980b9;
+            --input-bg: #333333;
+            --input-border: #404040;
+            --summary-bg: #333333;
+            --header-gradient: linear-gradient(135deg, #1a1a1a, #2c3e50);
+            --toggle-bg: #404040;
+            --toggle-button: #2d2d2d;
+        }
+
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            line-height: 1.6;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Enhanced Header Styles */
+        header {
+            background: var(--header-gradient);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .head {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--accent-primary);
+            text-decoration: none;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* About Section Styles */
+        .about-section {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 3rem auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            max-width: 800px;
+        }
+
+        .about-section h2 {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.75rem;
+            font-weight: bold;
+        }
+
+        .about-content {
+            background: var(--summary-bg);
+            padding: 1.5rem;
+            border-radius: 5px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .about-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: 2px solid var(--text-primary);
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1.5rem;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .theme-toggle:hover {
+            background: white;
+            color: var(--text-primary);
+        }
+        main {
+            padding: 3rem 0;
+        }
+
+        section {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            header .container {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav ul {
+                gap: 1rem;
+                justify-content: center;
+            }
+
+            .about-section {
+                padding: 1.5rem;
+                margin: 2rem 1rem;
+            }
+            
+            .about-content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1 class="head">Briefly.ai</h1>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About</a></li>
+                </ul>
+                
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="about-section">
+                <h2>About Us</h2>
+                <div class="about-content">
+                    <p>Welcome to Briefly.ai! Our AI-based video summary generator is designed to make content consumption faster and more efficient. We leverage advanced AI technology to condense lengthy videos into easy-to-understand summaries, perfect for users looking to save time without missing essential details. Whether you're a student, professional, or just a curious mind, Briefly.ai is here to simplify your learning and entertainment experience.</p>
+                    <p>Our mission is to empower individuals by making complex content more accessible. With a user-friendly interface and innovative AI, Briefly.ai offers seamless video analysis and summarization.</p>
+                    <button class="theme-toggle" onclick="toggleTheme()">🌙 Dark Mode</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        function toggleTheme() {
+            const html = document.documentElement;
+            const isDark = html.getAttribute('data-theme') === 'dark';
+            html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+            
+            const button = document.querySelector('.theme-toggle');
+            button.innerHTML = isDark ? '🌙 Dark Mode' : '☀️ Light Mode';
+        }
+    </script>
+</body>
+</html>
